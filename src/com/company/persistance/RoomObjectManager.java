@@ -40,11 +40,11 @@ public class RoomObjectManager {
             serializer.write(room); //write each object from memory
         }
         serializer.close(true);
-        FileIO.writeToFile("testRoom.csv", writer); //Assuming data is already in memory so not appending but overriding file.
+        FileIO.writeToFile("rooms.csv", writer); //Assuming data is already in memory so not appending but overriding file.
     }
 
     private void initRooms() {
-        StringReader reader = FileIO.getFromFile("testRoom.csv");
+        StringReader reader = FileIO.getFromFile("rooms.csv");
         Deserializer deserializer = CsvIOFactory.createFactory(Room.class).createDeserializer();
         deserializer.open(reader);
         while (deserializer.hasNext()) {
