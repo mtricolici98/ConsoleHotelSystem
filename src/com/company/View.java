@@ -43,6 +43,9 @@ public class View {
                 case "front desk":
                     printChoicesFrontDesk();
                     break;
+                case "administrator":
+                    printChoicesAdmin();
+                    break;
                 default:
                     System.out.println("NOT IMPLEMENTED");
                     break;
@@ -117,7 +120,7 @@ public class View {
                 printCancelSelectorGuest();
                 break;
             case "seeavailable":
-                printAvailableRooms();
+                printAvailableRooms(true);
                 break;
             case "mybookings":
                 printAllSelfBookings(false);
@@ -135,7 +138,7 @@ public class View {
         System.out.println("You are logged in as front desk manager:");
         System.out.println("Select from options bellow:");
         System.out.println("Type 'book' to book a room:");
-        System.out.println("Type 'seeavailable' to book a room:");
+        System.out.println("Type 'seeavailable' to see available rooms:");
         System.out.println("Type 'bookings' to see all bookings:");
         System.out.println("Type 'cancelrsv' to cancel a reservation:");
         System.out.println("NOTE: Type quit anytime to exit the application.");
@@ -149,7 +152,7 @@ public class View {
                 printCancelSelectorFrontDesk();
                 break;
             case "seeavailable":
-                printAvailableRooms();
+                printAvailableRooms(true);
                 break;
             case "bookings":
                 printAllBookings(false);
@@ -163,10 +166,37 @@ public class View {
         }
     }
 
+    private void printChoicesAdmin() {
+        System.out.println("You are logged in as ADMIN:");
+        System.out.println("Select from options bellow:");
+        System.out.println("Type 'allrooms' too see all existing rooms:");
+        System.out.println("NOTE: Type quit anytime to exit the application.");
+        String input = sc.nextLine();
+        checkIfExit(input);
+        switch (input) {
+            case "allrooms":
+                printAllRooms();
+                break;
+            default:
+                printSeparator();
+                System.out.println("No such option or you don't have enough permissions.");
+                printMenu();
+                break;
+
+        }
+    }
+
+    private void printAllRooms(){
+        printSeparator();
+        for(Room r: models.Rooms().getAllRoooms())
+            System.out.println(r.toString());
+        printMenu();
+    }
+
     private void printBookSelectorFrontDesk() {
         printSeparator();
         System.out.println("Please select the number of the room you want to book.");
-        printAvailableRooms();
+        printAvailableRooms(false);
         System.out.println("Type the number of the room you want to book");
         String input = sc.nextLine();
         checkIfExit(input);
@@ -178,12 +208,15 @@ public class View {
         }
         System.out.println("Please input the date you want to book the room from ( format DD/MM/YY )");
         input = sc.nextLine();
+        checkIfExit(input);
         Date dateFrom = parseDate(input);
         System.out.println("Please input the date you want to book the room until ( format DD/MM/YY )");
         input = sc.nextLine();
+        checkIfExit(input);
         Date dateTo = parseDate(input);
         System.out.println("Please input the name of the guest.");
         input = sc.nextLine();
+        checkIfExit(input);
         User userToLink = models.Users().getUser(input);
         if (userToLink != null) {
             System.out.println("Found an existing user with this name, linking it.");
@@ -193,6 +226,7 @@ public class View {
         Booking newBooking = new Booking(chosenRoom, userToLink, dateFrom, dateTo);
         if (models.Bookings().addBooking(newBooking)) {
             System.out.println("Successfully booked: " + newBooking.toString());
+            models.Users().addUser(userToLink);
             printMenu();
         } else {
             System.out.println("The booking you are trying to create overlaps with another booking, try again with other room or some other dates.");
@@ -202,25 +236,30 @@ public class View {
 
     private void printCancelSelectorGuest() {
         printSeparator();
-        printAllSelfBookings(true);
-        System.out.println("Type in the ID of the booking you want to delete.");
-        String input = sc.nextLine();
-        models.Bookings().deleteBookingByIndex(Integer.parseInt(input) - 1);
-        System.out.println("Successfully deleted");
+        int res = printAllSelfBookings(true);
+        if (res != 0) {
+            System.out.println("Type in the ID of the booking you want to delete.");
+            String input = sc.nextLine();
+            checkIfExit(input);
+            models.Bookings().deleteBookingByIndex(Integer.parseInt(input) - 1);
+            System.out.println("Successfully deleted");
+        }
         printMenu();
+
     }
 
     private void printCancelSelectorFrontDesk() {
         printSeparator();
-        printAllSelfBookings(true);
+        printAllBookings(true);
         System.out.println("Type in the ID of the booking you want to delete.");
         String input = sc.nextLine();
+        checkIfExit(input);
         models.Bookings().deleteBookingByIndex(Integer.parseInt(input) - 1);
         System.out.println("Successfully deleted");
         printMenu();
     }
 
-    private void printAvailableRooms() {
+    private void printAvailableRooms(boolean triggerMenu) {
         printSeparator();
         System.out.println("The following rooms are available today.");
         for (Room room : models.Rooms().getAllRoooms()) {
@@ -228,7 +267,8 @@ public class View {
                 System.out.println(room.toString());
             }
         }
-        printMenu();
+        if (triggerMenu)
+            printMenu();
     }
 
     private boolean isRoomAvailable(int roomNr) {
@@ -245,7 +285,7 @@ public class View {
     private void printBookSelector() {
         printSeparator();
         System.out.println("Please select the number of the room you want to book.");
-        printAvailableRooms();
+        printAvailableRooms(false);
         System.out.println("Type the number of the room you want to book");
         String input = sc.nextLine();
         checkIfExit(input);
@@ -257,9 +297,11 @@ public class View {
         }
         System.out.println("Please input the date you want to book the room from ( format DD/MM/YY )");
         input = sc.nextLine();
+        checkIfExit(input);
         Date dateFrom = parseDate(input);
         System.out.println("Please input the date you want to book the room until ( format DD/MM/YY )");
         input = sc.nextLine();
+        checkIfExit(input);
         Date dateTo = parseDate(input);
         Booking newBooking = new Booking(chosenRoom, activeUser, dateFrom, dateTo);
         if (models.Bookings().addBooking(newBooking)) {
@@ -271,21 +313,27 @@ public class View {
         }
     }
 
-    private void printAllSelfBookings(boolean showIndex) {
+    private int printAllSelfBookings(boolean showIndex) {
         printSeparator();
         System.out.println("Your bookings in our hotel are");
         int i = 1;
+        int found = 0;
         for (Booking booking : models.Bookings().getAllBookings()) {
             if (booking.getUser().getUsername().equals(activeUser.getUsername())) {
                 if (showIndex)
                     System.out.println("ID:" + i + ": " + booking.toString());
                 else
                     System.out.println(booking.toString());
+                found++;
             }
             i++;
         }
+        if (found == 0) {
+            System.out.println("It appears as you dont have any bookings in our hotel.");
+        }
         if (!showIndex) //Not returning to menu because a cancel action;
             printMenu();
+        return found;
     }
 
     private void printAllBookings(boolean showIndex) {
@@ -308,7 +356,7 @@ public class View {
         return new Date(Integer.parseInt(to_arr[2]), Integer.parseInt(to_arr[1]), Integer.parseInt(to_arr[0]));
     }
 
-    private void printSeparator() {
+    private static void printSeparator() {
         System.out.println("<----------------------------------------------------------------------->");
     }
 

@@ -64,7 +64,7 @@ public class Booking {
     }
 
     private String getDateToNormalString(Date date) {
-        return date.getDay() + "/" + date.getMonth() + "/" + date.getYear();
+        return date.getDate() + "/" + date.getMonth() + "/" + date.getYear();
     }
 
     public String toString() {

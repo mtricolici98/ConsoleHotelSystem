@@ -7,6 +7,8 @@ public class ModelManagerSingleton {
     private RoomObjectManager rooms;
     private UserObjectManager users;
     private BookingObjectManager bookings;
+    private RoomTypeObjectManager roomTypes;
+    private RoomCategoryObjectManager roomCategories;
 
     private ModelManagerSingleton() {
         rooms = new RoomObjectManager();
