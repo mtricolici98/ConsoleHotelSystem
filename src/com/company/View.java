@@ -193,7 +193,7 @@ public class View {
                 printAddCategory();
                 break;
             case "addroom":
-                printAddCategory();
+                printAddRoom();
                 break;
             default:
                 printSeparator();
