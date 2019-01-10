@@ -1,7 +1,9 @@
 package com.company.models;
 
+import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 
+@CsvDataType(defaultPrefix = "USR")
 public class User {
 
     @CsvField(pos = 1)
@@ -9,6 +11,8 @@ public class User {
 
     @CsvField(pos = 2)
     private String userGroup;
+
+    public User(){}
 
     public User(String username, String user_group) {
         this.username = username;

@@ -19,4 +19,6 @@ public class Booking {
     @CsvField(pos = 2, format = "dd.MM.yyyy")
     Date toDate;
 
+    public Booking(){}
+
 }

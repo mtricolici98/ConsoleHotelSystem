@@ -33,9 +33,15 @@ public class RoomObjectManager {
         saveRooms();
     }
 
+
+    public void deleteAllRooms(){
+        this.allRoooms.clear();
+    }
+
     private void saveRooms() {
         Serializer serializer = CsvIOFactory.createFactory(Room.class).createSerializer(); //setup csv serializer
         StringWriter writer = new StringWriter(); //need the writer to write the objects
+        serializer.open(writer);
         for (Room room : this.allRoooms) {
             serializer.write(room); //write each object from memory
         }

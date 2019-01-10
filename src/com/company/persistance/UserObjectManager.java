@@ -29,6 +29,10 @@ public class UserObjectManager {
         saveUsers();
     }
 
+    public void deleteAllUsers(){
+        this.allUsers.clear();
+    }
+
     public void deleteUser(String username) {
         this.allUsers.removeIf(user -> (user.getUsername().equals(username))); //Read docs for RemoveIF (pretty nice method)
         saveUsers();
@@ -36,7 +40,8 @@ public class UserObjectManager {
 
     private void saveUsers() {
         Serializer serializer = CsvIOFactory.createFactory(User.class).createSerializer(); //setup csv serializer
-        StringWriter writer = new StringWriter(); //need the writer to write the objects
+        StringWriter writer = new StringWriter(); //need the writer to write the
+        serializer.open(writer);
         for (User user : this.allUsers) {
             serializer.write(user); //write each object from memory
         }
