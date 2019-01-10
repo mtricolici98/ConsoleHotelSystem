@@ -17,6 +17,8 @@ public class Main {
             view.init();
         } catch (StackOverflowError e){
             System.out.println("OOPS, Something bad happened. Shutting down.");
+        } catch (Exception e){
+            System.out.println("OOPSIE DOOPSIE< CALL THE SYS ADMIN >");
         }
     }
 

@@ -173,6 +173,7 @@ public class View {
         System.out.println("Type 'addtype' too add a room type:");
         System.out.println("Type 'addcategory' too add a room category:");
         System.out.println("Type 'addroom' too add a room:");
+        System.out.println("Type 'report' too save a local report file:");
         System.out.println("NOTE: Type quit anytime to exit the application.");
         String input = sc.nextLine();
         checkIfExit(input);
@@ -194,6 +195,9 @@ public class View {
                 break;
             case "addroom":
                 printAddRoom();
+                break;
+            case "report":
+                reportToFle();
                 break;
             default:
                 printSeparator();
@@ -453,7 +457,7 @@ public class View {
         }
         Room room = new Room(rc, Integer.parseInt(number));
         if (models.Rooms().addRoom(room))
-            System.out.println("Room successfully added :" + rc.toString());
+            System.out.println("Room successfully added :" + room.toString());
         else System.out.println("Room with this number already exists.");
         printMenu();
     }
@@ -462,6 +466,13 @@ public class View {
     private Date parseDate(String stringDate) {
         String[] to_arr = stringDate.split("/");
         return new Date(Integer.parseInt(to_arr[2]), Integer.parseInt(to_arr[1]), Integer.parseInt(to_arr[0]));
+    }
+
+    private void reportToFle(){
+        ReportMgr rpmgr = new ReportMgr();
+        rpmgr.saveReportToFile();
+        System.out.println("REPORT WAS SAVED IN FILE Report.txt");
+        printMenu();
     }
 
     private static void printSeparator() {
