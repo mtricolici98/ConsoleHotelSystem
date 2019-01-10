@@ -13,7 +13,11 @@ public class Main {
 
     public static void main(String[] args) {
         View view = new View();
-        view.init();
+        try {
+            view.init();
+        } catch (StackOverflowError e){
+            System.out.println("OOPS, Something bad happened. Shutting down.");
+        }
     }
 
 }

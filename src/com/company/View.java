@@ -1,8 +1,6 @@
 package com.company;
 
-import com.company.models.Booking;
-import com.company.models.Room;
-import com.company.models.User;
+import com.company.models.*;
 import com.company.persistance.ModelManagerSingleton;
 
 import java.util.ArrayList;
@@ -170,12 +168,28 @@ public class View {
         System.out.println("You are logged in as ADMIN:");
         System.out.println("Select from options bellow:");
         System.out.println("Type 'allrooms' too see all existing rooms:");
+        System.out.println("Type 'allcategories' too see all existing categories:");
+        System.out.println("Type 'alltypes' too see all existing types:");
+        System.out.println("Type 'addtype' too add a room type:");
+        System.out.println("Type 'addcategory' too add a room category:");
         System.out.println("NOTE: Type quit anytime to exit the application.");
         String input = sc.nextLine();
         checkIfExit(input);
         switch (input) {
             case "allrooms":
                 printAllRooms();
+                break;
+            case "allcategories":
+                printAllCategories(true);
+                break;
+            case "alltypes":
+                printAllTypes(true);
+                break;
+            case "addtype":
+                printAddType();
+                break;
+            case "addcategory":
+                printAddCategory();
                 break;
             default:
                 printSeparator();
@@ -186,9 +200,9 @@ public class View {
         }
     }
 
-    private void printAllRooms(){
+    private void printAllRooms() {
         printSeparator();
-        for(Room r: models.Rooms().getAllRoooms())
+        for (Room r : models.Rooms().getAllRoooms())
             System.out.println(r.toString());
         printMenu();
     }
@@ -350,6 +364,96 @@ public class View {
         if (!showIndex) //Not returning to menu because a cancel action;
             printMenu();
     }
+
+    //ADMIN STUFF//
+
+    private void printAllCategories(boolean close) {
+        printSeparator();
+        for (RoomCategory rc : models.Categories().getAllCategories()) {
+            System.out.println(rc.toString());
+        }
+        if (close)
+            printMenu();
+    }
+
+    private void printAllTypes(boolean close) {
+        printSeparator();
+        for (RoomType rt : models.Types().getAllRoomTypes()) {
+            System.out.println(rt.toString());
+        }
+        if (close)
+            printMenu();
+    }
+
+
+    private void printAddType() {
+        printSeparator();
+        System.out.println("Type the name of the Type you want to add");
+        String name = sc.nextLine();
+        checkIfExit(name);
+        ArrayList<String> options = new ArrayList<>();
+        System.out.println("Type in options to add options, type DONE when done.");
+        String option = sc.nextLine();
+        checkIfExit(option);
+        do {
+            options.add(option);
+            option = sc.nextLine();
+            checkIfExit(option);
+        } while (!option.equals("DONE"));
+        RoomType type = new RoomType(name, options);
+        if (models.Types().addRoomType(type))
+            System.out.println("Type successfully added :" + type.toString());
+        else System.out.println("Type with this name already exists.");
+        printMenu();
+    }
+
+    private void printAddCategory() {
+        printSeparator();
+        System.out.println("Type the name of the category you want to add. (Single/Double/Apartment)");
+        String name = sc.nextLine();
+        checkIfExit(name);
+        System.out.println("Type in the name of the type for this category.");
+        String type = sc.nextLine();
+        checkIfExit(type);
+        RoomType rt = models.Types().getType(type);
+        if (rt == null) {
+            System.out.println("No such type exists, please try again");
+            printMenu();
+            return;
+        }
+        System.out.println("Type in the price of the category.");
+        String price = sc.nextLine();
+        RoomCategory rc = new RoomCategory(name, rt, Integer.parseInt(price));
+        if (models.Categories().addRoomCategory(rc))
+            System.out.println("Category successfully added :" + rc.toString());
+        else System.out.println("Such category already exists.");
+        printMenu();
+    }
+
+    private void printAddRoom() {
+        printSeparator();
+        System.out.println("Type the number of the room you want to add.");
+        String number = sc.nextLine();
+        checkIfExit(number);
+        System.out.println("Type in the name of the category for the room.");
+        String cat = sc.nextLine();
+        checkIfExit(cat);
+        System.out.println("Type in the name of the category type for the room.");
+        String type = sc.nextLine();
+        checkIfExit(type);
+        RoomCategory rc = models.Categories().getCategory(cat, type);
+        if (rc == null) {
+            System.out.println("No such category exists, please try again.");
+            printMenu();
+            return;
+        }
+        Room room = new Room(rc, Integer.parseInt(number));
+        if (models.Rooms().addRoom(room))
+            System.out.println("Room successfully added :" + rc.toString());
+        else System.out.println("Room with this number already exists.");
+        printMenu();
+    }
+
 
     private Date parseDate(String stringDate) {
         String[] to_arr = stringDate.split("/");

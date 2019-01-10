@@ -56,6 +56,6 @@ public class RoomCategory {
     }
 
     public String toString(){
-     return this.name + "  " + this.type.getName() + "  " + this.price;
+     return this.name + " room of type:" + this.type.getName() + ", priced at:" + this.price;
     }
 }

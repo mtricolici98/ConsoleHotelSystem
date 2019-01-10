@@ -24,7 +24,7 @@ public class RoomTypeObjectManager {
         return allRoomTypes;
     }
 
-    public boolean addRoom(RoomType roomType) {
+    public boolean addRoomType(RoomType roomType) {
         for (RoomType r : this.allRoomTypes) {
             if (r.getName().equals(roomType.getName())) {
                 return false;
@@ -35,13 +35,13 @@ public class RoomTypeObjectManager {
         return true;
     }
 
-    public boolean deleteCategory(String name) {
+    public boolean deleteType(String name) {
         boolean deleted = this.allRoomTypes.removeIf(type -> (type.getName().equals(name))); //Read docs for RemoveIF (pretty nice method)
         saveTypes();
         return deleted;
     }
 
-    public RoomType getCategory(String name, String typeName) {
+    public RoomType getType(String name) {
         for (RoomType r : this.allRoomTypes) {
             if (r.getName().equals(name))
                 return r;
@@ -49,7 +49,7 @@ public class RoomTypeObjectManager {
         return null;
     }
 
-    public void deleteAllCategories() {
+    public void deleteAllTypes() {
         this.allRoomTypes.clear();
     }
 
@@ -65,7 +65,7 @@ public class RoomTypeObjectManager {
     }
 
     private void initTypes() {
-        StringReader reader = FileIO.getFromFile("roomtypes.csv");
+        StringReader reader = FileIO.getFromFile("roomTypes.csv");
         Deserializer deserializer = CsvIOFactory.createFactory(RoomType.class).createDeserializer();
         deserializer.open(reader);
         while (deserializer.hasNext()) {

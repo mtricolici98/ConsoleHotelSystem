@@ -14,6 +14,8 @@ public class ModelManagerSingleton {
         rooms = new RoomObjectManager();
         users = new UserObjectManager();
         bookings = new BookingObjectManager();
+        roomTypes = new RoomTypeObjectManager();
+        roomCategories = new RoomCategoryObjectManager();
     }
 
     public static ModelManagerSingleton getInstance() {
