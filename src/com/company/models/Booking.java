@@ -21,4 +21,42 @@ public class Booking {
 
     public Booking(){}
 
+    public Booking(Room room, User user, Date fromDate, Date toDate) {
+        this.room = room;
+        this.user = user;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
 }

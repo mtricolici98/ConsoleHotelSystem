@@ -41,4 +41,12 @@ public class RoomType {
     public void setOptions(ArrayList<String> options) {
         this.options = options;
     }
+
+    public String toString() {
+        String options = "|";
+        for (String opt : this.options){
+            options += opt + "|";
+        }
+        return this.name + "; Options:" + options;
+    }
 }

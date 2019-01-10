@@ -8,10 +8,7 @@ import org.jsefa.csv.annotation.CsvSubRecord;
 public class Room {
 
     @CsvSubRecord(pos = 1, prefix = "RC")
-    public RoomCategory category;
-
-    @CsvSubRecord(pos = 2, prefix = "RT")
-    public RoomType type;
+    private RoomCategory category;
 
     @CsvField(pos = 2)
     public int number;
@@ -20,10 +17,9 @@ public class Room {
 
     }
 
-    public Room(RoomCategory category, int number, RoomType type) {
+    public Room(RoomCategory category, int number) {
         this.category = category;
         this.number = number;
-        this.type = type;
     }
 
     public RoomCategory getCategory() {
@@ -42,18 +38,11 @@ public class Room {
         this.number = number;
     }
 
-
-    public RoomType getType() {
-        return type;
-    }
-
-    public void setType(RoomType type) {
-        this.type = type;
-    }
-
-
     public int getPrice() {
-        //TODO ADD LOGIC TO CALCULATE PRICE
-        return 0;
+        return this.category.getPrice();
+    }
+
+    public String toString() {
+        return "Room number: " + this.number + ", " + this.category.getName() + ", " + this.category.getType().getName();
     }
 }

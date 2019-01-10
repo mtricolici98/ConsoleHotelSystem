@@ -12,18 +12,22 @@ public class RoomCategory {
      */
 
     @CsvField(pos = 1)
-    public String name;
+    private String name;
+
+    @CsvSubRecord(pos = 2, prefix = "RT")
+    private RoomType type;
 
     @CsvField(pos = 3)
-    public int price;
+    private int price;
 
     public RoomCategory() {
 
     }
 
 
-    public RoomCategory(String name, int price) {
+    public RoomCategory(String name, RoomType type, int price) {
         this.name = name;
+        this.type = type;
         this.price = price;
     }
 
@@ -41,5 +45,17 @@ public class RoomCategory {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public RoomType getType() {
+        return type;
+    }
+
+    public void setType(RoomType type) {
+        this.type = type;
+    }
+
+    public String toString(){
+     return this.name + "  " + this.type.getName() + "  " + this.price;
     }
 }

@@ -24,6 +24,12 @@ public class RoomObjectManager {
     }
 
     public void addRoom(Room room) {
+        for(Room r: this.allRoooms){
+            if(r.number == room.number){
+                System.out.println("Room with such number already exists, please delete it first.");
+                return;
+            }
+        }
         this.allRoooms.add(room);
         saveRooms();
     }
