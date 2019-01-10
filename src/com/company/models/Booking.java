@@ -63,8 +63,12 @@ public class Booking {
         this.toDate = toDate;
     }
 
+    private String getDateToNormalString(Date date) {
+        return date.getDay() + "/" + date.getMonth() + "/" + date.getYear();
+    }
+
     public String toString() {
         return "Booking of room: " + this.getRoom().toString() + ", for user: " + this.getUser().getUsername() + " from: "
-                + this.getFromDate().toLocaleString() + ", until: " + this.getToDate().toLocaleString();
+                + getDateToNormalString(fromDate)+ ", until: " + getDateToNormalString(toDate);
     }
 }

@@ -28,7 +28,7 @@ public class BookingObjectManager {
     public boolean addBooking(Booking booking) {
         for (Booking b : this.allBookings) {
             if (b.getRoom().getNumber() == booking.getRoom().getNumber()) {
-                if(b.getToDate().compareTo(booking.getFromDate()) >= 0 && b.getFromDate().compareTo(booking.getToDate()) >= 0){
+                if(b.getToDate().compareTo(booking.getFromDate()) >= 0 && b.getFromDate().compareTo(booking.getToDate()) <= 0){
                     return false;
                 }
             }
@@ -49,6 +49,10 @@ public class BookingObjectManager {
         return deleted;
     }
 
+    public void deleteBookingByIndex(int indx){
+        this.allBookings.remove(indx);
+        saveBookings();
+    }
 
     public Booking getBooking(String username, int roomNr) {
         for (Booking b : this.allBookings) {

@@ -31,16 +31,24 @@ public class View {
     }
 
     private void printMenu() {
+        printSeparator();
         if (activeUser == null) {
             System.out.println("You are not logged in, please enter username.");
             awaitLogin();
         } else {
-            if (activeUser.getUserGroup().equals("guest"))
-                printChoicesGuest();
+            switch (activeUser.getUserGroup()) {
+                case "guest":
+                    printChoicesGuest();
+                    break;
+                default:
+                    System.out.println("NOT IMPLEMENTED");
+                    break;
+            }
         }
     }
 
     private void awaitLogin() {
+        printSeparator();
         String input = sc.nextLine();
         checkIfExit(input);
         if (input.equals("register")) {
@@ -59,6 +67,7 @@ public class View {
     }
 
     private void register() {
+        printSeparator();
         Scanner sc = new Scanner(System.in);
         System.out.println("In order to register, first type your desired username: ");
         String inputUsername = sc.nextLine();
@@ -91,7 +100,9 @@ public class View {
         System.out.println("You are logged in as guest:");
         System.out.println("Select from options bellow:");
         System.out.println("Type 'book' to book a room:");
+        System.out.println("Type 'mybookings' to see all your bookings:");
         System.out.println("Type 'cancelrsv' to cancel a reservation:");
+        System.out.println("NOTE: Type quit anytime to exit the application.");
         String input = sc.nextLine();
         checkIfExit(input);
         switch (input) {
@@ -101,14 +112,26 @@ public class View {
             case "cancelrsv":
                 printCancelSelector();
                 break;
+            case "mybookings":
+                printAllSelfBookings(false);
+                break;
             default:
+                printSeparator();
                 System.out.println("No such option or you don't have enough permissions.");
+                printMenu();
+                break;
 
         }
     }
 
     private void printCancelSelector() {
-
+        printSeparator();
+        printAllSelfBookings(true);
+        System.out.println("Type in the ID of the booking you want to delete.");
+        String input = sc.nextLine();
+        models.Bookings().deleteBookingByIndex(Integer.parseInt(input) - 1);
+        System.out.println("Successfully deleted");
+        printMenu();
     }
 
 
@@ -135,16 +158,37 @@ public class View {
         Booking newBooking = new Booking(chosenRoom, activeUser, dateFrom, dateTo);
         if (models.Bookings().addBooking(newBooking)) {
             System.out.println("Successfully booked: " + newBooking.toString());
+            printMenu();
         } else {
             System.out.println("The booking you are trying to create overlaps with another booking, try again with other room or some other dates.");
             printMenu();
         }
     }
 
+    private void printAllSelfBookings(boolean showIndex) {
+        printSeparator();
+        System.out.println("Your bookings in our hotel are");
+        int i = 1;
+        for (Booking booking : models.Bookings().getAllBookings()) {
+            if (booking.getUser().getUsername().equals(activeUser.getUsername())) {
+                if (showIndex)
+                    System.out.println("ID:" + i + ": " + booking.toString());
+                else
+                    System.out.println(booking.toString());
+            }
+            i++;
+        }
+        if (!showIndex) //Not returning to menu because a cancel action;
+            printMenu();
+    }
 
     private Date parseDate(String stringDate) {
         String[] to_arr = stringDate.split("/");
         return new Date(Integer.parseInt(to_arr[2]), Integer.parseInt(to_arr[1]), Integer.parseInt(to_arr[0]));
+    }
+
+    private void printSeparator() {
+        System.out.println("<----------------------------------------------------------------------->");
     }
 
 }
