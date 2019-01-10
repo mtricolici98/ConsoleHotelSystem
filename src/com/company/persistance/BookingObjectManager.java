@@ -1,7 +1,7 @@
 package com.company.persistance;
 
 import com.company.models.Booking;
-import com.company.models.User;
+import com.company.models.Room;
 import org.jsefa.Deserializer;
 import org.jsefa.Serializer;
 import org.jsefa.csv.CsvIOFactory;
@@ -25,19 +25,37 @@ public class BookingObjectManager {
         return allBookings;
     }
 
-    public void addUser(Booking booking) {
+    public boolean addBooking(Booking booking) {
+        for (Booking b : this.allBookings) {
+            if (b.getRoom().getNumber() == booking.getRoom().getNumber()) {
+                if(b.getToDate().compareTo(booking.getFromDate()) >= 0 && b.getFromDate().compareTo(booking.getToDate()) >= 0){
+                    return false;
+                }
+            }
+        }
         this.allBookings.add(booking);
         saveBookings();
+        return true;
     }
 
     public void deleteAllBookings() {
         this.allBookings.clear();
     }
 
-    public void deleteBooking(String username, int roomNr) {
-        this.allBookings.removeIf(booking ->
+    public boolean deleteBooking(String username, int roomNr) {
+        boolean deleted = this.allBookings.removeIf(booking ->
                 (booking.getUser().getUsername().equals(username) && booking.getRoom().getNumber() == roomNr));
         saveBookings();
+        return deleted;
+    }
+
+
+    public Booking getBooking(String username, int roomNr) {
+        for (Booking b : this.allBookings) {
+            if (b.getUser().getUsername().equals(username) && b.getRoom().getNumber()==roomNr)
+                return b;
+        }
+        return null;
     }
 
     private void saveBookings() {

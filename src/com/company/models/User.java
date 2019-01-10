@@ -3,7 +3,7 @@ package com.company.models;
 import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 
-@CsvDataType(defaultPrefix = "USR")
+@CsvDataType(defaultPrefix = "US")
 public class User {
 
     @CsvField(pos = 1)
@@ -33,5 +33,9 @@ public class User {
 
     public void setUserGroup(String userGroup) {
         this.userGroup = userGroup;
+    }
+
+    public String toString(){
+        return "User: " + this.username + ", group:" + this.userGroup;
     }
 }

@@ -24,18 +24,33 @@ public class UserObjectManager {
         return allUsers;
     }
 
-    public void addUser(User user) {
+    public boolean addUser(User user) {
+        for (User u : this.allUsers) {
+            if (u.getUsername().equals(user.getUsername())) {
+                return false;
+            }
+        }
         this.allUsers.add(user);
         saveUsers();
+        return true;
     }
 
-    public void deleteAllUsers(){
+    public void deleteAllUsers() {
         this.allUsers.clear();
     }
 
-    public void deleteUser(String username) {
-        this.allUsers.removeIf(user -> (user.getUsername().equals(username))); //Read docs for RemoveIF (pretty nice method)
+    public boolean deleteUser(String username) {
+        boolean deleted = this.allUsers.removeIf(user -> (user.getUsername().equals(username))); //Read docs for RemoveIF (pretty nice method)
         saveUsers();
+        return deleted;
+    }
+
+    public User getUser(String username) {
+        for (User u : this.allUsers) {
+            if (u.getUsername().equals(username))
+                return u;
+        }
+        return null;
     }
 
     private void saveUsers() {

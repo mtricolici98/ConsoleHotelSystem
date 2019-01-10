@@ -1,25 +1,28 @@
 package com.company.models;
 
+import org.jsefa.csv.annotation.CsvDataType;
 import org.jsefa.csv.annotation.CsvField;
 import org.jsefa.csv.annotation.CsvSubRecord;
 
 import java.util.Date;
 
+@CsvDataType(defaultPrefix = "BO")
 public class Booking {
 
     @CsvSubRecord(pos = 1, prefix = "RO")
     Room room;
 
-    @CsvSubRecord(pos = 1, prefix = "USR")
+    @CsvSubRecord(pos = 2, prefix = "US")
     User user;
 
-    @CsvField(pos = 2, format = "dd.MM.yyyy")
+    @CsvField(pos = 3, format = "dd.MM.yyyy")
     Date fromDate;
 
-    @CsvField(pos = 2, format = "dd.MM.yyyy")
+    @CsvField(pos = 4, format = "dd.MM.yyyy")
     Date toDate;
 
-    public Booking(){}
+    public Booking() {
+    }
 
     public Booking(Room room, User user, Date fromDate, Date toDate) {
         this.room = room;
@@ -58,5 +61,10 @@ public class Booking {
 
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    public String toString() {
+        return "Booking of room: " + this.getRoom().toString() + ", for user: " + this.getUser().getUsername() + " from: "
+                + this.getFromDate().toLocaleString() + ", until: " + this.getToDate().toLocaleString();
     }
 }

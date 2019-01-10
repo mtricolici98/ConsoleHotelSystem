@@ -11,7 +11,7 @@ public class Room {
     private RoomCategory category;
 
     @CsvField(pos = 2)
-    public int number;
+    private int number;
 
     public Room() {
 
@@ -43,6 +43,6 @@ public class Room {
     }
 
     public String toString() {
-        return "Room number: " + this.number + ", " + this.category.getName() + ", " + this.category.getType().getName();
+        return "Room number: " + this.number + ", " + this.category.getName() + ", " + this.category.getType().getName() + ". Price:" + getPrice();
     }
 }

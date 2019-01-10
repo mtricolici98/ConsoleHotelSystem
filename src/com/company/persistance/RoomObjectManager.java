@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class RoomObjectManager {
 
     private ArrayList<Room> allRoooms;
+
     //Object manager for Room objects, used to save/delete/add/get all of the Room objects :)
     RoomObjectManager() {
         allRoooms = new ArrayList<>();
@@ -23,24 +24,32 @@ public class RoomObjectManager {
         return allRoooms;
     }
 
-    public void addRoom(Room room) {
-        for(Room r: this.allRoooms){
-            if(r.number == room.number){
-                System.out.println("Room with such number already exists, please delete it first.");
-                return;
+    public boolean addRoom(Room room) {
+        for (Room r : this.allRoooms) {
+            if (r.getNumber() == room.getNumber()) {
+                return false;
             }
         }
         this.allRoooms.add(room);
         saveRooms();
+        return true;
     }
 
-    public void deleteRoom(int number) {
-        this.allRoooms.removeIf(room -> (room.number == number)); //Read docs for RemoveIF (pretty nice method)
+    public boolean deleteRoom(int number) {
+        boolean deleted = this.allRoooms.removeIf(room -> (room.getNumber() == number)); //Read docs for RemoveIF (pretty nice method)
         saveRooms();
+        return deleted;
     }
 
+    public Room getRoom(int number) {
+        for (Room r : this.allRoooms) {
+            if (r.getNumber() == number)
+                return r;
+        }
+        return null;
+    }
 
-    public void deleteAllRooms(){
+    public void deleteAllRooms() {
         this.allRoooms.clear();
     }
 
