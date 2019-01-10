@@ -26,7 +26,7 @@ public class RoomCategoryObjectManager {
 
     public boolean addRoomCategory(RoomCategory roomCategory) {
         for (RoomCategory r : this.allCategories) {
-            if (r.getName().equals(roomCategory.getName())) {
+            if (r.getName().equals(roomCategory.getName()) && r.getType().getName().equals(roomCategory.getType().getName())) {
                 return false;
             }
         }

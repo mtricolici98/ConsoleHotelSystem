@@ -172,6 +172,7 @@ public class View {
         System.out.println("Type 'alltypes' too see all existing types:");
         System.out.println("Type 'addtype' too add a room type:");
         System.out.println("Type 'addcategory' too add a room category:");
+        System.out.println("Type 'addroom' too add a room:");
         System.out.println("NOTE: Type quit anytime to exit the application.");
         String input = sc.nextLine();
         checkIfExit(input);
@@ -189,6 +190,9 @@ public class View {
                 printAddType();
                 break;
             case "addcategory":
+                printAddCategory();
+                break;
+            case "addroom":
                 printAddCategory();
                 break;
             default:
