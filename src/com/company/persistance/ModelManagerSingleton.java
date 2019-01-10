@@ -31,5 +31,13 @@ public class ModelManagerSingleton {
     public BookingObjectManager Bookings() {
         return this.bookings;
     }
+
+    public RoomCategoryObjectManager Categories() {
+        return this.roomCategories;
+    }
+
+    public RoomTypeObjectManager Types() {
+        return this.roomTypes;
+    }
 }
 

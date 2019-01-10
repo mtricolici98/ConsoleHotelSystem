@@ -61,11 +61,11 @@ public class RoomCategoryObjectManager {
             serializer.write(roomCategory); //write each object from memory
         }
         serializer.close(true);
-        FileIO.writeToFile("roomsTypes.csv", writer); //Assuming data is already in memory so not appending but overriding file.
+        FileIO.writeToFile("roomCats.csv", writer); //Assuming data is already in memory so not appending but overriding file.
     }
 
     private void initCategories() {
-        StringReader reader = FileIO.getFromFile("roomsTypes.csv");
+        StringReader reader = FileIO.getFromFile("roomCats.csv");
         Deserializer deserializer = CsvIOFactory.createFactory(RoomCategory.class).createDeserializer();
         deserializer.open(reader);
         while (deserializer.hasNext()) {
