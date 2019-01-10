@@ -1,7 +1,13 @@
 package com.company.models;
 
+import org.jsefa.csv.annotation.CsvField;
+
 public class User {
+
+    @CsvField(pos = 1)
     private String username;
+
+    @CsvField(pos = 2)
     private String userGroup;
 
     public User(String username, String user_group) {
