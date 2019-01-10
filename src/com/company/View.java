@@ -3,9 +3,7 @@ package com.company;
 import com.company.models.*;
 import com.company.persistance.ModelManagerSingleton;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 public class View {
 
@@ -25,6 +23,8 @@ public class View {
     }
 
     public void init() {
+        Timer timer = new Timer();
+        timer.schedule(new ReportBookings(), 0, 30000);
         printMenu();
     }
 
@@ -139,6 +139,8 @@ public class View {
         System.out.println("Type 'seeavailable' to see available rooms:");
         System.out.println("Type 'bookings' to see all bookings:");
         System.out.println("Type 'cancelrsv' to cancel a reservation:");
+        System.out.println("Type 'amountdue' to see how much a customer should pay:");
+        System.out.println("Type 'payall' to pay for all bookings of a customer:");
         System.out.println("NOTE: Type quit anytime to exit the application.");
         String input = sc.nextLine();
         checkIfExit(input);
@@ -154,6 +156,12 @@ public class View {
                 break;
             case "bookings":
                 printAllBookings(false);
+                break;
+            case "amountdue":
+                printAmountDue();
+                break;
+            case "payall":
+                printMoneyPay();
                 break;
             default:
                 printSeparator();
@@ -462,21 +470,65 @@ public class View {
         printMenu();
     }
 
+    private void printAmountDue(){
+        printSeparator();
+        System.out.println("Type the name of the customer that has to pay.");
+        String name = sc.nextLine();
+        checkIfExit(name);
+        int to_pay = models.Users().getAmmountForPay(name);
+        if(to_pay ==0 ){
+            System.out.println("Customer doesnt have to pay anything. SCAM.");
+            printMenu();
+        } else {
+            System.out.println("Customer owes you " + to_pay + " BGN.");
+            printMenu();
+        }
+    }
+
+
+    private void printMoneyPay(){
+        printSeparator();
+        System.out.println("Type the name of the customer that has to pay.");
+        String name = sc.nextLine();
+        checkIfExit(name);
+        int to_pay = models.Users().getAmmountForPay(name);
+        if(to_pay ==0 ){
+            System.out.println("Customer doesnt have to pay anything. SCAM.");
+            printMenu();
+        } else {
+            models.Users().pay(name);
+            System.out.println("Paid successfully.");
+            printMenu();
+        }
+    }
+
 
     private Date parseDate(String stringDate) {
         String[] to_arr = stringDate.split("/");
         return new Date(Integer.parseInt(to_arr[2]), Integer.parseInt(to_arr[1]), Integer.parseInt(to_arr[0]));
     }
 
-    private void reportToFle(){
+    private void reportToFle() {
         ReportMgr rpmgr = new ReportMgr();
         rpmgr.saveReportToFile();
         System.out.println("REPORT WAS SAVED IN FILE Report.txt");
         printMenu();
     }
 
+
     private static void printSeparator() {
         System.out.println("<----------------------------------------------------------------------->");
     }
 
+}
+
+
+class ReportBookings extends TimerTask {
+    public void run() {
+        System.out.println("Current bookings are.");
+        for (Booking booking : ModelManagerSingleton.getInstance().Bookings().getAllBookings()) {
+            System.out.println(booking.toString());
+        }
+        System.out.println("<----------------------------------->");
+    }
 }

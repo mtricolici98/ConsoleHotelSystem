@@ -1,5 +1,6 @@
 package com.company.persistance;
 
+import com.company.models.Booking;
 import com.company.models.User;
 import org.jsefa.Deserializer;
 import org.jsefa.Serializer;
@@ -8,6 +9,8 @@ import org.jsefa.csv.CsvIOFactory;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class UserObjectManager {
 
@@ -73,6 +76,39 @@ public class UserObjectManager {
             this.allUsers.add(u);
         }
         deserializer.close(true);
+    }
+
+    public int getAmmountForPay(String username){
+        ArrayList<Booking> bookings_to_pay = new ArrayList<>();
+        for (Booking b: ModelManagerSingleton.getInstance().Bookings().getAllBookings()){
+            if (b.getUser().getUsername().equals(username)){
+                bookings_to_pay.add(b);
+            }
+        }
+        int ammount = 0;
+        for(Booking b: bookings_to_pay){
+            ammount += b.getRoom().getPrice() * getDateDiff( b.getFromDate(), b.getToDate(), TimeUnit.DAYS);
+        }
+        return ammount;
+    }
+
+    public void pay(String username){
+        ArrayList<Integer> bookings_paid_idx = new ArrayList<>();
+        int i = 0;
+        for (Booking b: ModelManagerSingleton.getInstance().Bookings().getAllBookings()){
+            if (b.getUser().getUsername().equals(username)){
+                bookings_paid_idx.add(i);
+            }
+            i++;
+        }
+        for(int idx: bookings_paid_idx){
+            ModelManagerSingleton.getInstance().Bookings().deleteBookingByIndex(idx);
+        }
+    }
+
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
 }

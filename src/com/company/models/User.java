@@ -12,7 +12,8 @@ public class User {
     @CsvField(pos = 2)
     private String userGroup;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String username, String user_group) {
         this.username = username;
@@ -35,7 +36,7 @@ public class User {
         this.userGroup = userGroup;
     }
 
-    public String toString(){
+    public String toString() {
         return "User: " + this.username + ", group:" + this.userGroup;
     }
 }
